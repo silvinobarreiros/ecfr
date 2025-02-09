@@ -1,0 +1,74 @@
+version: '3.8'
+
+x-common-variables: &common-variables
+  ENVIRONMENT: local
+  DB_HOST: host.docker.internal
+  DB_DATABASE: ecfr
+  DB_USER: postgres
+  DB_PASSWORD: password
+  DB_PORT: 5432
+  DB_SSL: false
+  API_KEY: docker-compose-key
+
+services:
+  db-postgres:
+    image: postgres:14.5
+    container_name: db-postgres-ecfr
+    healthcheck:
+      test: psql postgres --command "select 1" -U postgres
+      interval: 5s
+      timeout: 10s
+      retries: 120
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ecfr
+    networks:
+      - ecfr
+
+  frontend:
+    container_name: ecfr-frontend
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile.local
+      target: runner
+    restart: always
+    volumes:
+      - ./apps/frontend/src:/opt/apps/frontend/src
+      - ./apps/frontend/package.json:/opt/apps/frontend/package.json
+    environment:
+      NEXT_PUBLIC_BACK_END_API_URL: http://localhost:4535
+      NEXT_PUBLIC_APP_API_KEY: docker-compose-key
+    ports:
+      - 3000:3000
+    networks:
+      - ecfr
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile.local
+      target: development
+    working_dir: /opt
+    container_name: ecfr-backend
+    environment:
+      <<: *common-variables
+      DB_APP_USER: ${DB_APP_USER}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD}
+    depends_on:
+      - db-postgres
+    volumes:
+      - ./apps/api/src:/opt/apps/api/src
+      - ./apps/api/package.json:/opt/apps/api/package.json
+    ports:
+      - 4535:4535
+    networks:
+      - ecfr
+
+networks:
+  ecfr:
+    name: ecfr

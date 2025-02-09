@@ -1,0 +1,48 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local", "**/.env"],
+  "globalEnv": [
+    "NODE_ENV",
+    "PORT"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["NEXT_*"]
+    },
+    "start": {
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["NEXT_*"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "NODE_*",
+        "DB_*",
+        "NEXT_*",
+        "AUTH_*",
+        "API_*"
+      ]
+    },
+    "dev:watch": {
+      "dependsOn": ["^dev:watch"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "cache": false,
+      "env": ["NODE_*", "NEXT_*"]
+    },
+    "migrations": {
+      "dependsOn": ["^migrations"],
+      "outputs": [],
+      "cache": false
+    }
+  }
+}

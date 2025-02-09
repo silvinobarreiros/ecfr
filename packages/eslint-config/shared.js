@@ -1,0 +1,55 @@
+module.exports = {
+  'arrow-body-style': 2,
+  'no-alert': 0,
+  camelcase: 0,
+  'no-console': 1,
+  'no-unused-vars': 0,
+  'no-param-reassign': 0,
+  'no-plusplus': 2,
+  'no-underscore-dangle': 0,
+  'no-restricted-exports': 0,
+  'no-promise-executor-return': 0,
+  'import/prefer-default-export': 0,
+  'import/extensions': 'off',
+  'import/no-duplicates': 1,
+  'import/no-useless-path-segments': 1,
+  'import/no-extraneous-dependencies': 0,
+  '@typescript-eslint/naming-convention': 0,
+  '@typescript-eslint/no-use-before-define': 0,
+  'prefer-destructuring': [
+    1,
+    {
+      object: true,
+      array: false,
+    },
+  ],
+  'unused-imports/no-unused-imports': 0,
+  'unused-imports/no-unused-vars': [
+    0,
+    {
+      vars: 'all',
+      varsIgnorePattern: '^_',
+      args: 'after-used',
+      argsIgnorePattern: '^_',
+    },
+  ],
+  '@typescript-eslint/no-shadow': 0,
+  '@typescript-eslint/ban-ts-comment': 0,
+  '@typescript-eslint/no-explicit-any': 0,
+  '@typescript-eslint/no-non-null-assertion': 2,
+  '@typescript-eslint/no-empty-function': 1,
+  '@typescript-eslint/explicit-module-boundary-types': 0,
+  '@typescript-eslint/no-unused-vars': [
+    1,
+    {
+      vars: 'all',
+      args: 'none',
+    },
+  ],
+  'no-restricted-syntax': [
+    0,
+    {
+      selector: 'ForOfStatement',
+    },
+  ],
+}
