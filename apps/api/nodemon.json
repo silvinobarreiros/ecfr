@@ -1,0 +1,10 @@
+{
+  "restartable": "rs",
+  "delay": "2500",
+  "events": {
+    "crash": "echo 'Application has crashed! Restarting in 2.5 seconds...' && sleep 2.5"
+  },
+  "watch": ["src"],
+  "ext": "ts,json",
+  "exec": "npm run dev:server || exit 1"
+}
