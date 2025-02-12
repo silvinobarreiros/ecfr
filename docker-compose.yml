@@ -1,35 +1,9 @@
 version: '3.8'
 
 x-common-variables: &common-variables
-  ENVIRONMENT: local
-  DB_HOST: host.docker.internal
-  DB_DATABASE: ecfr
-  DB_USER: postgres
-  DB_PASSWORD: password
-  DB_PORT: 5432
-  DB_SSL: false
   API_KEY: docker-compose-key
 
 services:
-  db-postgres:
-    image: postgres:14.5
-    container_name: db-postgres-ecfr
-    healthcheck:
-      test: psql postgres --command "select 1" -U postgres
-      interval: 5s
-      timeout: 10s
-      retries: 120
-    ports:
-      - 5432:5432
-    volumes:
-      - ./data/postgres-volume:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: ecfr
-    networks:
-      - ecfr
-
   frontend:
     container_name: ecfr-frontend
     build:
