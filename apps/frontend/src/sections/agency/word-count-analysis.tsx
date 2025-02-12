@@ -35,9 +35,13 @@ export default function WordCountAnalysis({ data }: Props) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+
     plugins: {
       legend: {
         position: 'top' as const,
+        labels: {
+          color: '#ffffff', // This changes the legend text color
+        },
       },
       tooltip: {
         callbacks: {
@@ -48,12 +52,24 @@ export default function WordCountAnalysis({ data }: Props) {
       },
     },
     scales: {
+      x: {
+        ticks: {
+          color: '#ffffff', // or any color you want
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)', // optional: for grid lines
+        },
+      },
       y: {
         beginAtZero: true,
         ticks: {
           callback(value: any) {
             return value.toLocaleString()
           },
+          color: '#ffffff', // or any color you want
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)', // optional: for grid lines
         },
       },
     },
@@ -70,7 +86,7 @@ export default function WordCountAnalysis({ data }: Props) {
           <Bar data={chartData} options={options} />
         </div>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+        <Typography variant="body2" color="text.default" sx={{ mt: 2 }}>
           Average words per section: {Math.round(data.averageWordsPerSection).toLocaleString()}
         </Typography>
       </CardContent>

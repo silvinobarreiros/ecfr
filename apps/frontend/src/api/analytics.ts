@@ -82,9 +82,9 @@ export const useAgencyAnalytics = (slug: string) => {
 }
 
 // Historical Changes
-export const useHistoricalChanges = (slug: string, startDate: string, endDate: string) => {
+export const useHistoricalChanges = (slug: string, startDate: string) => {
   const { data, error, isLoading, isValidating } = useSWR(
-    slug ? endpoints.analytics.agencies.historical(slug, startDate, endDate) : null,
+    slug ? endpoints.analytics.agencies.historical(slug, startDate) : null,
     fetcher(validateHistoricalChanges)
   )
 

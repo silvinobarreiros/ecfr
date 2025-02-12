@@ -77,6 +77,31 @@ export default function ComplexityAnalysis({ data }: ComplexityAnalysisProps) {
                   responsive: true,
                   maintainAspectRatio: false,
                   indexAxis: 'y' as const,
+                  scales: {
+                    x: {
+                      ticks: {
+                        color: '#ffffff', // or any color you want
+                      },
+                      grid: {
+                        color: 'rgba(255, 255, 255, 0.1)', // optional: for grid lines
+                      },
+                    },
+                    y: {
+                      ticks: {
+                        color: '#ffffff', // or any color you want
+                      },
+                      grid: {
+                        color: 'rgba(255, 255, 255, 0.1)', // optional: for grid lines
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      labels: {
+                        color: '#ffffff', // This changes the legend text color
+                      },
+                    },
+                  },
                 }}
               />
             </div>

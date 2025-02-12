@@ -95,6 +95,16 @@ export default function RegulatoryBurdenAnalysis({ data }: { data: RegulatoryBur
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'right' as const,
+                      align: 'center' as const,
+                      labels: {
+                        color: '#ffffff',
+                        padding: 20,
+                      },
+                    },
+                  },
                 }}
               />
             </Box>
@@ -111,7 +121,7 @@ export default function RegulatoryBurdenAnalysis({ data }: { data: RegulatoryBur
                 unit="agencies"
               />
               <Paper elevation={2} sx={{ p: 2 }}>
-                <Typography color="text.secondary" variant="subtitle2" gutterBottom>
+                <Typography color="text.default" variant="subtitle1" gutterBottom>
                   Agency References
                 </Typography>
                 <Box sx={{ maxHeight: 200, overflow: 'auto' }}>

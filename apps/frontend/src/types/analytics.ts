@@ -77,7 +77,7 @@ export interface HistoricalChange {
   wordsRemoved: number
   summary: string
   title: string
-  chapter: string
+  chapter?: string
   section: string
   significantChange: boolean
 }
@@ -177,7 +177,7 @@ const HistoricalChangeSchema = z.object({
   date: z.string(),
   agencySlug: z.string(),
   title: z.string(),
-  chapter: z.string(),
+  chapter: z.string().optional(),
   section: z.string(),
   changeType: z.enum(['addition', 'modification', 'removal']),
   sectionsAffected: z.number(),

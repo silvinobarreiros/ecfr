@@ -84,8 +84,8 @@ export const endpoints = {
     agencies: {
       list: () => '/agencies',
       get: (slug: string) => `/agencies/${slug}`,
-      historical: (slug: string, startDate: string, endDate: string) =>
-        `/agencies/${slug}/historical?startDate=${startDate}&endDate=${endDate}`,
+      historical: (slug: string, startDate: string) =>
+        `/agencies/${slug}/historical?startDate=${startDate}`,
       wordCounts: (slug: string) => `/agencies/${slug}/word-counts`,
       burden: (slug: string) => `/agencies/${slug}/burden`,
     },

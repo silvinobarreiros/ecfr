@@ -43,9 +43,13 @@ export default function TitleOverview() {
                 <TableRow key={title.number}>
                   <TableCell>{title.number}</TableCell>
                   <TableCell>{title.name}</TableCell>
-                  <TableCell>{new Date(title.latest_amended_on).toLocaleDateString()}</TableCell>
                   <TableCell>
-                    {title.processing_in_progress ? (
+                    {title.latestAmendedOn
+                      ? new Date(title.latestAmendedOn).toLocaleDateString()
+                      : ''}
+                  </TableCell>
+                  <TableCell>
+                    {title.processingInProgress ? (
                       <Chip label="Processing" color="warning" size="small" />
                     ) : (
                       <Chip label="Up to date" color="success" size="small" />

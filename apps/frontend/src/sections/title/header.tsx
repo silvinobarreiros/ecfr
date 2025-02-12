@@ -20,8 +20,9 @@ export default function TitleHeader({ title }: TitleHeaderProps) {
           <Grid item>
             <MetricCard
               label="Last Amended"
-              value={new Date(title.latestAmendedOn).toLocaleDateString()}
-              unit="date"
+              value={
+                title.latestAmendedOn ? new Date(title.latestAmendedOn).toLocaleDateString() : ''
+              }
             />
           </Grid>
           <Grid item>

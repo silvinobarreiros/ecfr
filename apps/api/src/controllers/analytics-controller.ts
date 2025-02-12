@@ -114,19 +114,30 @@ class AnalyticsController implements Controller {
       const changes: HistoricalChange[] = []
 
       if (slug === 'all') {
-        let agencies = this.ecrfAnalysisClient.getAgencies()
-        agencies = agencies.slice(0, 2)
+        const agencies = this.ecrfAnalysisClient.getAgencies()
 
         for await (const agency of agencies) {
-          const agencyChanges = await this.ecrfAnalysisClient.getHistoricalChanges(
-            agency.slug,
-            startDate
-          )
+          const cache = await this.ecrfAnalysisClient.getHistoricalChanges(agency.slug, startDate)
+
+          const agencyChanges =
+            cache ?? (await this.ecrfAnalysisClient.getHistoricalChanges(agency.slug, startDate))
+
+          if (cache) {
+            logger.info('Using cached historical changes')
+          }
 
           changes.push(...agencyChanges)
         }
       } else {
-        const agencyChanges = await this.ecrfAnalysisClient.getHistoricalChanges(slug, startDate)
+        const cache = await this.ecrfAnalysisClient.getHistoricalChanges(slug, startDate)
+
+        const agencyChanges =
+          cache ?? (await this.ecrfAnalysisClient.getHistoricalChanges(slug, startDate))
+
+        if (cache) {
+          logger.info('Using cached historical changes')
+        }
+
         changes.push(...agencyChanges)
       }
 
@@ -146,7 +157,13 @@ class AnalyticsController implements Controller {
         return BAD_REQUEST(res)
       }
 
-      const wordCounts = await this.ecrfAnalysisClient.getAgencyWordCounts(slug)
+      const cache = await this.ecrfAnalysisClient.getAgencyWordCounts(slug)
+
+      if (cache) {
+        logger.info('Using cached word counts')
+      }
+
+      const wordCounts = cache ?? (await this.ecrfAnalysisClient.getAgencyWordCounts(slug))
       return ok(res, wordCounts)
     } catch (error) {
       logger.error('Failed to get agency word counts', error)
@@ -163,7 +180,9 @@ class AnalyticsController implements Controller {
         return BAD_REQUEST(res)
       }
 
-      const burden = await this.ecrfAnalysisClient.getRegulatoryBurden(slug)
+      const cache = await this.ecrfAnalysisClient.getRegulatoryBurden(slug)
+
+      const burden = cache ?? (await this.ecrfAnalysisClient.getRegulatoryBurden(slug))
       return ok(res, burden)
     } catch (error) {
       logger.error('Failed to get regulatory burden', error)
@@ -187,10 +206,22 @@ class AnalyticsController implements Controller {
         return BAD_REQUEST(res)
       }
 
-      const [complexity, advanced] = await Promise.all([
-        this.ecrfAnalysisClient.getComplexityMetrics(titleNumber),
-        this.ecrfAnalysisClient.getAdvancedTextMetrics(titleNumber),
-      ])
+      const complexityCache = await this.ecrfAnalysisClient.getComplexityMetrics(titleNumber)
+      const advancedCache = await this.ecrfAnalysisClient.getAdvancedTextMetrics(titleNumber)
+
+      if (complexityCache) {
+        logger.info('Using cached complexity metrics')
+      }
+
+      if (advancedCache) {
+        logger.info('Using cached advanced metrics')
+      }
+
+      const complexity =
+        complexityCache ?? (await this.ecrfAnalysisClient.getComplexityMetrics(titleNumber))
+
+      const advanced =
+        advancedCache ?? (await this.ecrfAnalysisClient.getAdvancedTextMetrics(titleNumber))
 
       return ok(res, { complexity, advanced })
     } catch (error) {
@@ -215,7 +246,13 @@ class AnalyticsController implements Controller {
         return BAD_REQUEST(res)
       }
 
-      const complexity = await this.ecrfAnalysisClient.getComplexityMetrics(titleNumber)
+      const cache = await this.ecrfAnalysisClient.getComplexityMetrics(titleNumber)
+
+      if (cache) {
+        logger.info('Using cached complexity metrics')
+      }
+
+      const complexity = cache ?? (await this.ecrfAnalysisClient.getComplexityMetrics(titleNumber))
       return ok(res, complexity)
     } catch (error) {
       logger.error('Failed to get title complexity', error)
@@ -239,7 +276,13 @@ class AnalyticsController implements Controller {
         return BAD_REQUEST(res)
       }
 
-      const metrics = await this.ecrfAnalysisClient.getAdvancedTextMetrics(titleNumber)
+      const cache = await this.ecrfAnalysisClient.getAdvancedTextMetrics(titleNumber)
+
+      if (cache) {
+        logger.info('Using cached advanced metrics')
+      }
+
+      const metrics = cache ?? (await this.ecrfAnalysisClient.getAdvancedTextMetrics(titleNumber))
       return ok(res, metrics)
     } catch (error) {
       logger.error('Failed to get advanced metrics', error)

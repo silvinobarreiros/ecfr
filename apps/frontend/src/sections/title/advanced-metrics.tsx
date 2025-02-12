@@ -135,7 +135,7 @@ export default function AdvancedMetrics({ data }: AdvancedMetricsProps) {
 
           <Grid item xs={12}>
             <Paper sx={{ p: 2, mt: 2, bgcolor: 'background.default' }}>
-              <Typography variant="h6" gutterBottom color="primary">
+              <Typography variant="h6" gutterBottom color="default">
                 Definition Coverage
               </Typography>
               <Grid container spacing={2}>
@@ -149,7 +149,7 @@ export default function AdvancedMetrics({ data }: AdvancedMetricsProps) {
               </Grid>
 
               <Box sx={{ mt: 3 }}>
-                <Typography variant="subtitle1" gutterBottom sx={{ color: 'primary.main' }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ color: 'default' }}>
                   Defined Terms
                 </Typography>
                 <Grid container spacing={1}>
@@ -159,7 +159,8 @@ export default function AdvancedMetrics({ data }: AdvancedMetricsProps) {
                         elevation={1}
                         sx={{
                           p: 1.5,
-                          backgroundColor: 'white',
+                          backgroundColor: 'primary',
+                          cursor: 'default',
                           '&:hover': { backgroundColor: 'action.hover' },
                         }}
                       >
