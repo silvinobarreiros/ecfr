@@ -147,10 +147,17 @@ export default function TopAgencies() {
 function groupCFRReferences(references: CFRReference[]) {
   return references.reduce(
     (acc, ref) => {
-      if (!acc[ref.title]) {
-        acc[ref.title] = new Set<string>()
+      if (!ref.chapter) return acc
+
+      let ac = acc[ref.title]
+
+      if (!ac) {
+        ac = new Set<string>()
       }
-      acc[ref.title].add(ref.chapter)
+
+      ac.add(ref.chapter)
+      acc[ref.title] = ac
+
       return acc
     },
     {} as Record<number, Set<string>>

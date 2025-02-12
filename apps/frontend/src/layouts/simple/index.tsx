@@ -1,5 +1,3 @@
-import Header from '../common/header-simple'
-
 // ----------------------------------------------------------------------
 
 type Props = {

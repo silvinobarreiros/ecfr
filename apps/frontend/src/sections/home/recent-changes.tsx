@@ -1,16 +1,16 @@
-import { useState } from 'react'
 import {
+  Box,
   Card,
   CardContent,
-  Typography,
+  Chip,
+  Grid,
   List,
   ListItem,
-  Chip,
   Pagination,
-  Box,
-  Grid,
-  Divider,
+  Typography,
 } from '@mui/material'
+import { useState } from 'react'
+
 import { useHistoricalChanges } from '@/api/analytics'
 
 const ITEMS_PER_PAGE = 5

@@ -16,13 +16,9 @@ type Props = {
 
 export default function AgencyView({ slug }: Props) {
   const { wordCounts, regulatoryBurden, agencyLoading } = useAgencyAnalytics(slug)
-  // const { changes, changesLoading } = useHistoricalChanges(slug, '2023-01-01', '2024-02-10')
+  const { changes, changesLoading } = useHistoricalChanges(slug, '2023-01-01')
 
-  // if (agencyLoading || changesLoading) {
-  //   return <Box>Loading...</Box>
-  // }
-
-  if (agencyLoading) {
+  if (agencyLoading || changesLoading) {
     return <Box>Loading...</Box>
   }
 
@@ -43,12 +39,12 @@ export default function AgencyView({ slug }: Props) {
         </Grid>
       </Grid>
 
-      {/* <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 4 }}>
         <Typography variant="h6" gutterBottom>
           Historical Changes
         </Typography>
         <HistoricalChangesChart changes={changes} />
-      </Box> */}
+      </Box>
     </Container>
   )
 }
