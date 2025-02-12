@@ -26,7 +26,7 @@ export const loadEnv = async (): Promise<Result<Environment, Error>> => {
 
   logger.info('🔧 Configuration loaded:', redact(config))
 
-  const analysisCache = new FileAnalyticsCache('./db-json')
+  const analysisCache = new FileAnalyticsCache(config.server.cacheLocation)
   const ecrfClient = new WebECFRClient()
 
   const ecrfAnalytics = new ECFRAnalytics(ecrfClient, analysisCache)

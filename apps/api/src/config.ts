@@ -9,6 +9,7 @@ export type Configuration = {
   server: {
     port: number
     apiKey: string
+    cacheLocation: string
   }
 }
 
@@ -21,6 +22,7 @@ const configSchema = z.object({
     .default('4535'),
 
   API_KEY: z.string(),
+  CACHE_LOCATION: z.string().default('./db-json'),
 })
 
 export default (): Result<Configuration, Error> => {
@@ -39,6 +41,7 @@ export default (): Result<Configuration, Error> => {
     server: {
       port: config.data.PORT,
       apiKey: config.data.API_KEY,
+      cacheLocation: config.data.CACHE_LOCATION,
     },
   })
 }

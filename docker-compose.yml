@@ -31,10 +31,6 @@ services:
     container_name: ecfr-backend
     environment:
       <<: *common-variables
-      DB_APP_USER: ${DB_APP_USER}
-      DB_APP_PASSWORD: ${DB_APP_PASSWORD}
-    depends_on:
-      - db-postgres
     volumes:
       - ./apps/api/src:/opt/apps/api/src
       - ./apps/api/package.json:/opt/apps/api/package.json
