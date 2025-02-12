@@ -44,6 +44,7 @@ export default class Server {
 
     this.httpServer.listen({ port }, () => {
       logger.info(`🚀  Server ready at http://localhost:${port}`)
+      logger.info(`Current directory: ${process.cwd()}`)
     })
   }
 
