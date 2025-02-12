@@ -1,0 +1,10 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "noEmit": false
+  },
+  "include": ["server.mts"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -30,23 +30,23 @@ services:
     networks:
       - ecfr
 
-  # frontend:
-  #   container_name: ecfr-frontend
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/frontend/Dockerfile.local
-  #     target: runner
-  #   restart: always
-  #   volumes:
-  #     - ./apps/frontend/src:/opt/apps/frontend/src
-  #     - ./apps/frontend/package.json:/opt/apps/frontend/package.json
-  #   environment:
-  #     NEXT_PUBLIC_BACK_END_API_URL: http://localhost:4535
-  #     NEXT_PUBLIC_APP_API_KEY: docker-compose-key
-  #   ports:
-  #     - 3000:3000
-  #   networks:
-  #     - ecfr
+  frontend:
+    container_name: ecfr-frontend
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile.local
+      target: runner
+    restart: always
+    volumes:
+      - ./apps/frontend/src:/opt/apps/frontend/src
+      - ./apps/frontend/package.json:/opt/apps/frontend/package.json
+    environment:
+      NEXT_PUBLIC_BACK_END_API_URL: http://localhost:4535
+      NEXT_PUBLIC_APP_API_KEY: docker-compose-key
+    ports:
+      - 3000:3000
+    networks:
+      - ecfr
 
   backend:
     build:

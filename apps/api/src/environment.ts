@@ -1,13 +1,17 @@
+import { Ok, Result } from 'ts-results-es'
+
 import loadConfig, { Configuration, redact } from '@/config'
 import logger from '@/logger'
-import { Repositories } from '@repos/index'
-import { createDbConnection, createRepositories } from '@repos/postgres'
-import { Ok, Result } from 'ts-results-es'
+import { ECFRClient } from './types/ecrf-client'
+import { ECFRAnalytics } from './services/analysis/ecrf-analytics'
+import { WebECFRClient } from './services/ecrf/web-ecrf-client'
+import { FileAnalyticsCache } from './services/analysis/analytics-cache'
 
 export default interface Environment {
   startup: Date
   config: Configuration
-  repositories: Repositories
+  ecrfClient: ECFRClient
+  ecrfAnalytics: ECFRAnalytics
 }
 
 export const loadEnv = async (): Promise<Result<Environment, Error>> => {
@@ -22,22 +26,17 @@ export const loadEnv = async (): Promise<Result<Environment, Error>> => {
 
   logger.info('🔧 Configuration loaded:', redact(config))
 
-  const connectionResult = createDbConnection(config)
-  if (connectionResult.isErr()) {
-    return connectionResult
-  }
+  const analysisCache = new FileAnalyticsCache('./db-json')
+  const ecrfClient = new WebECFRClient()
 
-  const connection = connectionResult.value
-
-  logger.info('🔗 Database connection established')
-
-  const repositories = createRepositories(connection)
+  const ecrfAnalytics = new ECFRAnalytics(ecrfClient, analysisCache)
+  ecrfAnalytics.initialize()
 
   return Ok({
     startup,
     logger,
     config,
-    connection,
-    repositories,
+    ecrfClient,
+    ecrfAnalytics,
   })
 }

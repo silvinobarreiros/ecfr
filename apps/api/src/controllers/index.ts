@@ -2,14 +2,15 @@ import { Router } from 'express'
 import HealthController from '@controllers/health-controller'
 import Environment from '@/environment'
 import authHandler from '@/middleware/auth-handler'
+import AnalyticsController from './analytics-controller'
 
 export default (environment: Environment): Router[] => {
-  const { repositories, config } = environment
-
   // auth layer
   const authMiddleware = authHandler(environment)
 
-  const authenticatedControllers = [].map((controller) => {
+  const analyticsController = new AnalyticsController(environment.ecrfAnalytics)
+
+  const authenticatedControllers = [analyticsController.router].map((controller) => {
     const router = Router()
 
     router.use(authMiddleware)

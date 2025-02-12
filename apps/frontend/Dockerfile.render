@@ -1,0 +1,97 @@
+################################################################################
+# Base Layer
+################################################################################
+FROM node:20.12-alpine AS base
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+################################################################################
+# Dependencies Layer
+################################################################################
+FROM base AS deps
+
+RUN apk add --no-cache libc6-compat
+RUN apk update
+WORKDIR /opt
+
+# Copy only necessary files for installing dependencies
+COPY package.json pnpm-lock.yaml ./
+
+# Use cache to install dependencies
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+################################################################################
+# Turbo Layer
+################################################################################
+FROM deps AS turbo
+
+RUN pnpm install -g turbo@2.1.0
+
+################################################################################
+# Builder Layer
+################################################################################
+FROM turbo AS builder
+
+WORKDIR /opt
+COPY . .
+
+# Prune workspace using Turbo
+RUN turbo prune frontend --docker
+
+################################################################################
+# Installer Layer
+################################################################################
+FROM turbo AS installer
+
+WORKDIR /opt
+COPY --from=builder /opt/out/json/ .
+COPY --from=builder /opt/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /opt/.prettierrc ./.prettierrc
+
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV TURBO_TELEMETRY_DISABLED=1
+
+# Copy installed dependencies
+COPY --from=deps /opt/node_modules ./node_modules
+
+# Install any additional dependencies for the pruned workspace
+RUN pnpm install
+
+# Build the project
+COPY --from=builder /opt/out/full/ .
+COPY turbo.json turbo.json
+
+RUN --mount=type=secret,id=_env,dst=/etc/secrets/.env cp /etc/secrets/.env .env
+
+RUN set -a && \
+  source .env && \
+  set +a && \
+  turbo build --filter=frontend...
+
+################################################################################
+# Runner Layer
+################################################################################
+FROM base AS runner
+
+WORKDIR /opt
+
+# Copy necessary files and folders for running the application
+COPY --from=installer /opt/apps/frontend/next.config.mjs .
+COPY --from=installer /opt/apps/frontend/package.json .
+
+# Ensure express and other dependencies are available
+COPY --from=installer /opt/node_modules ./node_modules
+
+# Automatically leverage output traces to reduce image size
+COPY --from=installer --chown=nextjs:nodejs /opt/apps/frontend/.next/standalone ./
+COPY --from=installer --chown=nextjs:nodejs /opt/apps/frontend/.next/static ./apps/frontend/.next/static
+COPY --from=installer --chown=nextjs:nodejs /opt/apps/frontend/public ./apps/frontend/public
+
+COPY --from=installer /opt/apps/frontend/dist/server.mjs ./apps/frontend/server.mjs
+COPY --from=installer /opt/apps/frontend/node_modules ./apps/frontend/node_modules
+
+WORKDIR /opt/apps/frontend
+
+CMD HOSTNAME="0.0.0.0" node server.mjs

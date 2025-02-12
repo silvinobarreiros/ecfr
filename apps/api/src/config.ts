@@ -10,14 +10,6 @@ export type Configuration = {
     port: number
     apiKey: string
   }
-  database: {
-    user: string
-    password: string
-    database: string
-    host: string
-    port: number
-    ssl: boolean
-  }
 }
 
 const configSchema = z.object({
@@ -29,21 +21,6 @@ const configSchema = z.object({
     .default('4535'),
 
   API_KEY: z.string(),
-
-  DB_HOST: z.string().default('127.0.0.1'),
-
-  DB_PORT: z
-    .string()
-    .transform((v) => parseInt(v, 10))
-    .default('5432'),
-
-  DB_DATABASE: z.string(),
-  DB_APP_USER: z.string(),
-  DB_APP_PASSWORD: z.string(),
-  DB_SSL: z
-    .string()
-    .refine((val) => ['true', 'false'].includes(val.toLowerCase()))
-    .transform((str) => str.toLowerCase() === 'true'),
 })
 
 export default (): Result<Configuration, Error> => {
@@ -63,14 +40,6 @@ export default (): Result<Configuration, Error> => {
       port: config.data.PORT,
       apiKey: config.data.API_KEY,
     },
-    database: {
-      user: config.data.DB_APP_USER,
-      password: config.data.DB_APP_PASSWORD,
-      database: config.data.DB_DATABASE,
-      host: config.data.DB_HOST,
-      port: config.data.DB_PORT,
-      ssl: config.data.DB_SSL,
-    },
   })
 }
 
@@ -83,10 +52,6 @@ export const redact = (config: Configuration): any => {
       ...config.server,
       apiKey: 'REDACTED',
       authKey: 'REDACTED',
-    },
-    database: {
-      ...config.database,
-      password: 'REDACTED',
     },
   }
 

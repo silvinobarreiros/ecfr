@@ -1,6 +1,5 @@
 import { createServer, Server as HttpServer } from 'http'
 import express, { Application } from 'express'
-import bodyParser from 'body-parser'
 import controllers from '@/controllers'
 import Environment from '@/environment'
 import logger from '@/logger'

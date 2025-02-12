@@ -1,0 +1,9 @@
+{
+  "rootDir": ".",
+  "aliases": {
+    "src/*": ["./src", "./src/*"]
+  },
+  "entry": ["src/**/*"],
+  "moduleDirectory": ["node_modules"],
+  "ignorePatterns": ["**/node_modules/**", "**/*.d.ts"]
+}

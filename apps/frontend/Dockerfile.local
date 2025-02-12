@@ -1,0 +1,69 @@
+################################################################################
+# Base Layer
+################################################################################
+FROM --platform=linux/arm64 node:20.12-alpine AS base
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+
+################################################################################
+# Dependencies Layer
+################################################################################
+FROM base AS deps
+
+RUN apk add --no-cache libc6-compat
+RUN apk update
+WORKDIR /opt
+
+# Copy only necessary files for installing dependencies
+COPY package.json pnpm-lock.yaml ./
+
+# Use cache to install dependencies
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+################################################################################
+# Turbo Layer
+################################################################################
+FROM deps AS turbo
+
+RUN pnpm install -g turbo@2.1.0
+RUN pnpm install -g nodemon
+
+################################################################################
+# Builder Layer
+################################################################################
+FROM turbo AS builder
+
+WORKDIR /opt
+COPY . .
+
+# Prune workspace using Turbo
+RUN turbo prune frontend --docker
+
+################################################################################
+# Runner Layer
+################################################################################
+FROM turbo AS runner
+
+WORKDIR /opt
+COPY --from=builder /opt/out/json/ .
+COPY --from=builder /opt/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /opt/.prettierrc ./.prettierrc
+
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV TURBO_TELEMETRY_DISABLED 1
+
+# Copy installed dependencies
+COPY --from=deps /opt/node_modules ./node_modules
+
+# Install any additional dependencies for the pruned workspace
+RUN pnpm install
+
+# Build the project
+COPY --from=builder /opt/out/full/ .
+COPY turbo.json turbo.json
+
+ENV NODE_ENV development
+
+CMD HOSTNAME="0.0.0.0" turbo dev:watch --filter=frontend...
