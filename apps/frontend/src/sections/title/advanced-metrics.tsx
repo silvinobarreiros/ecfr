@@ -1,6 +1,7 @@
 'use client'
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { useState } from 'react'
 
 import {
   Accordion,
@@ -10,6 +11,7 @@ import {
   Card,
   CardContent,
   Grid,
+  Pagination,
   Paper,
   Typography,
 } from '@mui/material'
@@ -24,6 +26,19 @@ interface AmbiguousTermCardProps {
 }
 
 function AmbiguousTermCard({ term, count, contexts }: AmbiguousTermCardProps) {
+  const [contextsPage, setContextsPage] = useState(1)
+  const contextsPerPage = 3
+
+  const totalContextPages = Math.ceil(contexts.length / contextsPerPage)
+  const currentContexts = contexts.slice(
+    (contextsPage - 1) * contextsPerPage,
+    contextsPage * contextsPerPage
+  )
+
+  const handleContextsPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setContextsPage(value)
+  }
+
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -40,23 +55,46 @@ function AmbiguousTermCard({ term, count, contexts }: AmbiguousTermCardProps) {
       </AccordionSummary>
       <AccordionDetails>
         <Typography variant="subtitle2" gutterBottom>
-          Usage Contexts:
+          Usage Contexts ({contexts.length} total):
         </Typography>
-        {contexts.map((context, index) => (
-          <Paper
-            key={index}
-            elevation={0}
+
+        <Box sx={{ mb: 2 }}>
+          {currentContexts.map((context, index) => (
+            <Paper
+              key={index}
+              elevation={0}
+              sx={{
+                p: 1,
+                mb: 1,
+                backgroundColor: 'background.default',
+                borderLeft: 3,
+                borderColor: 'primary.main',
+              }}
+            >
+              <Typography variant="body2">{context}</Typography>
+            </Paper>
+          ))}
+        </Box>
+
+        {totalContextPages > 1 && (
+          <Box
             sx={{
-              p: 1,
-              mb: 1,
-              backgroundColor: 'background.default',
-              borderLeft: 3,
-              borderColor: 'primary.main',
+              display: 'flex',
+              justifyContent: 'center',
+              pt: 2,
+              borderTop: 1,
+              borderColor: 'divider',
             }}
           >
-            <Typography variant="body2">{context}</Typography>
-          </Paper>
-        ))}
+            <Pagination
+              count={totalContextPages}
+              page={contextsPage}
+              onChange={handleContextsPageChange}
+              color="primary"
+              size="small"
+            />
+          </Box>
+        )}
       </AccordionDetails>
     </Accordion>
   )
@@ -67,6 +105,20 @@ interface AdvancedMetricsProps {
 }
 
 export default function AdvancedMetrics({ data }: AdvancedMetricsProps) {
+  const [ambiguousTermsPage, setAmbiguousTermsPage] = useState(1)
+  const termsPerPage = 5
+
+  const { ambiguousTerms } = data.ambiguityScore.details
+  const totalTermPages = Math.ceil(ambiguousTerms.length / termsPerPage)
+  const currentTerms = ambiguousTerms.slice(
+    (ambiguousTermsPage - 1) * termsPerPage,
+    ambiguousTermsPage * termsPerPage
+  )
+
+  const handleTermsPageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setAmbiguousTermsPage(value)
+  }
+
   return (
     <Card>
       <CardContent>
@@ -119,16 +171,37 @@ export default function AdvancedMetrics({ data }: AdvancedMetricsProps) {
 
               <Box sx={{ mt: 3 }}>
                 <Typography variant="subtitle1" gutterBottom sx={{ color: 'default' }}>
-                  Detailed Term Analysis
+                  Detailed Term Analysis ({ambiguousTerms.length} terms)
                 </Typography>
-                {data.ambiguityScore.details.ambiguousTerms.map((term, index) => (
-                  <AmbiguousTermCard
-                    key={index}
-                    term={term.term}
-                    count={term.count}
-                    contexts={term.contexts}
-                  />
-                ))}
+                <Box sx={{ mb: 2 }}>
+                  {currentTerms.map((term, index) => (
+                    <AmbiguousTermCard
+                      key={index}
+                      term={term.term}
+                      count={term.count}
+                      contexts={term.contexts}
+                    />
+                  ))}
+                </Box>
+                {totalTermPages > 1 && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      pt: 2,
+                      borderTop: 1,
+                      borderColor: 'divider',
+                    }}
+                  >
+                    <Pagination
+                      count={totalTermPages}
+                      page={ambiguousTermsPage}
+                      onChange={handleTermsPageChange}
+                      color="primary"
+                      size="small"
+                    />
+                  </Box>
+                )}
               </Box>
             </Paper>
           </Grid>

@@ -40,7 +40,7 @@ export default function HomeView() {
           </Grid>
         </Grid>
 
-        <Box sx={{ mt: 4 }}>
+        <Box sx={{ mt: 4, pb: 5 }}>
           <TitleOverview />
         </Box>
       </Container>

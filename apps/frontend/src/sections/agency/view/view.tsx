@@ -40,9 +40,6 @@ export default function AgencyView({ slug }: Props) {
       </Grid>
 
       <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Historical Changes
-        </Typography>
         <HistoricalChangesChart changes={changes} />
       </Box>
     </Container>

@@ -1,8 +1,8 @@
 # eCFR Analytics Project 🏛️
 
-[Live Dashboard](https://frontend-ecfr.onrender.com/)
+[Live Dashboard](https://frontend-ecfr.onrender.com/) **Best viewed on a desktop broswer**
 
-# TL;DR
+Definitons of metrics can be found below. I opted to not provide tool-tips to stay under the time limit.
 
 # Overview 🔎
 

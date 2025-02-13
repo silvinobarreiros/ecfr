@@ -79,6 +79,9 @@ export default function HistoricalChangesChart({ changes }: HistoricalChangesCha
     plugins: {
       legend: {
         position: 'top' as const,
+        labels: {
+          color: '#ffffff',
+        },
       },
       tooltip: {
         callbacks: {
@@ -91,6 +94,20 @@ export default function HistoricalChangesChart({ changes }: HistoricalChangesCha
     scales: {
       y: {
         beginAtZero: true,
+        ticks: {
+          color: '#ffffff', // Y-axis labels color
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)', // Optional: Y-axis grid lines color
+        },
+      },
+      x: {
+        ticks: {
+          color: '#ffffff', // X-axis labels color
+        },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)', // Optional: X-axis grid lines color
+        },
       },
     },
   }
