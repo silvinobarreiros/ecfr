@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { useHistoricalChanges } from '@/api/analytics'
 
 const ITEMS_PER_PAGE = 5
-const CARD_HEIGHT = 400 // Fixed height in pixels
+const CARD_HEIGHT = 800
 
 export default function RecentChanges() {
   const [page, setPage] = useState(1)
