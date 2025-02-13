@@ -4,6 +4,47 @@
 
 Definitons of metrics can be found below. I opted to not provide tool-tips to stay under the time limit.
 
+# Table of Contents
+
+- [Overview 🔎](#overview-)
+- [Metrics](#metrics)
+  - [Title Complexity Metrics](#title-complexity-metrics)
+    - [Simple Counting Metrics](#simple-counting-metrics)
+    - [Flesch-Kincaid Score](#flesch-kincaid-score)
+    - [Technical Term Frequency](#technical-term-frequency)
+  - [Title Text Metrics](#title-text-metrics)
+    - [Text Entropy](#text-entropy)
+    - [Legal Clarity Score](#legal-clarity-score)
+    - [Ambiguity Score](#ambiguity-score)
+    - [Definition Coverage](#definition-coverage)
+  - [Agency Metrics](#agency-metrics)
+    - [Regulatory Burden Analysis](#regulatory-burden-analysis)
+      - [Restriction Words](#restriction-words)
+      - [Exception Words](#exception-words)
+      - [Form Requirements](#form-requirements)
+      - [Deadline Mentions](#deadline-mentions)
+      - [Enforcement Metrics](#enforcement-metrics)
+        - [Penalty Provisions](#penalty-provisions)
+        - [Inspection Requirements](#inspection-requirements)
+        - [Audit Requirements](#audit-requirements)
+      - [Regulatory Flexibility](#regulatory-flexibility)
+        - [Small Entity Mentions](#small-entity-mentions)
+        - [Exemptions](#exemptions)
+        - [Alternatives](#alternatives)
+      - [Interagency Complexity](#interagency-complexity)
+        - [Agency References](#agency-references)
+        - [Overlapping Jurisdictions](#overlapping-jurisdictions)
+    - [Word Count](#word-count)
+  - [Historical Change Tracking](#historical-change-tracking)
+- [General Architecture](#general-architecture)
+  - [Offline analysis](#offline-analysis)
+- [Running locally](#running-locally)
+  - [Dependencies](#dependencies)
+  - [Clone the repository](#clone-the-repository)
+  - [Install dependencies](#install-dependencies)
+  - [Start the development server](#start-the-development-server)
+- [Usage 🚀](#usage-)
+
 # Overview 🔎
 
 A web application for analyzing and visualizing the Electronic Code of Federal Regulations (eCFR). This tool provides insights into regulatory complexity, patterns, and changes over time. It combines some light natural language processing with legal domain knowledge to extract meaningful metrics from regulatory text.
@@ -303,7 +344,7 @@ Other than node you'll need:
 
 ## Clone the repository
 
-`git clone https://github.com/sbarreiros/ecfr-analytics.git`
+`git clone https://github.com/silvinobarreiros/ecfr.git`
 
 ## Install dependencies
 
